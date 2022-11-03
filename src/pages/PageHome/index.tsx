@@ -1,7 +1,47 @@
 import React from "react";
 import * as Chakra from "@chakra-ui/react";
 
+interface IState {
+  hiringManagerName: string;
+  jobTitle: string;
+  companyName: string;
+  quality: string;
+  candidateQualities: string[];
+  candidateName: string;
+  date: string;
+}
+
 export const PageHome = () => {
+  const [state, setState] = React.useState<IState>({
+    hiringManagerName: "",
+    jobTitle: "",
+    companyName: "",
+    quality: "",
+    candidateQualities: [],
+    candidateName: "",
+    date: "",
+  });
+
+  console.log(state);
+
+  const handleChange = (value: string, key: string) => {
+    setState((state) => ({ ...state, [key]: value }));
+  };
+
+  const handleAddQuality = () => {
+    try {
+      if (state.candidateQualities.length >= 5)
+        throw new Error("You cannot add more than 5 qualities");
+      setState((state) => ({
+        ...state,
+        candidateQualities: [...state.candidateQualities, state.quality],
+        quality: "",
+      }));
+    } catch (e: any) {
+      alert(e.message);
+    }
+  };
+
   return (
     <Chakra.SimpleGrid
       columns={[1, 1, 1, 2]}
@@ -28,12 +68,22 @@ export const PageHome = () => {
           placeholder="Hiring Manager Name"
           borderRadius="0"
           fontSize="xs"
+          value={state.hiringManagerName}
+          onChange={(e) => handleChange(e.target.value, "hiringManagerName")}
         />
-        <Chakra.Input placeholder="Job Title" borderRadius="0" fontSize="xs" />
+        <Chakra.Input
+          placeholder="Job Title"
+          borderRadius="0"
+          fontSize="xs"
+          value={state.jobTitle}
+          onChange={(e) => handleChange(e.target.value, "jobTitle")}
+        />
         <Chakra.Input
           placeholder="Company Name"
           borderRadius="0"
           fontSize="xs"
+          value={state.companyName}
+          onChange={(e) => handleChange(e.target.value, "companyName")}
         />
 
         <Chakra.HStack align="flex-end" gap="8">
@@ -41,12 +91,15 @@ export const PageHome = () => {
             placeholder="Candidate Quality"
             borderRadius="0"
             fontSize="xs"
+            value={state.quality}
+            onChange={(e) => handleChange(e.target.value, "quality")}
           />
           <Chakra.Button
             borderRadius="2"
             colorScheme="linkedin"
             fontSize="xs"
             minW="100px"
+            onClick={handleAddQuality}
           >
             Add
           </Chakra.Button>
@@ -101,12 +154,16 @@ export const PageHome = () => {
           placeholder="Candidate Name"
           borderRadius="0"
           fontSize="xs"
+          value={state.candidateName}
+          onChange={(e) => handleChange(e.target.value, "candidateName")}
         />
         <Chakra.Input
           placeholder="Date"
           type="date"
           borderRadius="0"
           fontSize="xs"
+          value={state.date}
+          onChange={(e) => handleChange(e.target.value, "date")}
         />
       </Chakra.SimpleGrid>
 
