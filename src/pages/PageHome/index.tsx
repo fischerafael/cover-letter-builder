@@ -22,8 +22,6 @@ export const PageHome = () => {
     date: "",
   });
 
-  console.log(state);
-
   const handleChange = (value: string, key: string) => {
     setState((state) => ({ ...state, [key]: value }));
   };
@@ -32,6 +30,11 @@ export const PageHome = () => {
     try {
       if (state.candidateQualities.length >= 5)
         throw new Error("You cannot add more than 5 qualities");
+
+      if (state.candidateQualities.includes(state.quality))
+        throw new Error(
+          "This quality has already been added. Try a different one"
+        );
       setState((state) => ({
         ...state,
         candidateQualities: [...state.candidateQualities, state.quality],
@@ -41,6 +44,37 @@ export const PageHome = () => {
       alert(e.message);
     }
   };
+
+  const handleRemoveQuality = (qual: string) => {
+    setState((state) => ({
+      ...state,
+      candidateQualities: state.candidateQualities.filter(
+        (quality) => quality !== qual
+      ),
+    }));
+  };
+
+  const qualitiesString = state.candidateQualities.map((qual, index) => {
+    if (state.candidateQualities.length === 1) {
+      return qual;
+    }
+    if (state.candidateQualities.length === 2) {
+      if (index === 1) {
+        return `, and ${qual}`;
+      }
+      return qual;
+    }
+
+    if (index === 0) {
+      return qual;
+    }
+
+    if (index === state.candidateQualities.length - 1) {
+      return `, and ${qual}`;
+    }
+
+    return `, ${qual}`;
+  });
 
   return (
     <Chakra.SimpleGrid
@@ -106,48 +140,21 @@ export const PageHome = () => {
         </Chakra.HStack>
 
         <Chakra.VStack w="full" spacing="2">
-          <Chakra.HStack w="full" gap="8">
-            <Chakra.Text w="full">
-              5 years of experience working in tech
-            </Chakra.Text>
-            <Chakra.Button
-              borderRadius="2"
-              colorScheme="linkedin"
-              fontSize="xs"
-              minW="100px"
-              variant="outline"
-            >
-              Remove
-            </Chakra.Button>
-          </Chakra.HStack>
-          <Chakra.HStack w="full" gap="8">
-            <Chakra.Text w="full">
-              5 years of experience working in tech
-            </Chakra.Text>
-            <Chakra.Button
-              borderRadius="2"
-              colorScheme="linkedin"
-              fontSize="xs"
-              minW="100px"
-              variant="outline"
-            >
-              Remove
-            </Chakra.Button>
-          </Chakra.HStack>
-          <Chakra.HStack w="full" gap="8">
-            <Chakra.Text w="full">
-              5 years of experience working in tech
-            </Chakra.Text>
-            <Chakra.Button
-              borderRadius="2"
-              colorScheme="linkedin"
-              fontSize="xs"
-              minW="100px"
-              variant="outline"
-            >
-              Remove
-            </Chakra.Button>
-          </Chakra.HStack>
+          {state.candidateQualities.map((qual, index) => (
+            <Chakra.HStack w="full" gap="8" key={index}>
+              <Chakra.Text w="full">{qual}</Chakra.Text>
+              <Chakra.Button
+                borderRadius="2"
+                colorScheme="linkedin"
+                fontSize="xs"
+                minW="100px"
+                variant="outline"
+                onClick={() => handleRemoveQuality(qual)}
+              >
+                Remove
+              </Chakra.Button>
+            </Chakra.HStack>
+          ))}
         </Chakra.VStack>
 
         <Chakra.Input
@@ -186,8 +193,9 @@ export const PageHome = () => {
             which I believe you are the hiring manager.
           </Chakra.Text>
           <Chakra.Text>
-            I can offer you {"ALL_QUALITIES"}, all of which should make me an
-            ideal candidate for this opening.
+            I can offer you {qualitiesString},{" "}
+            {state.candidateQualities.length > 1 && "all of"} which should make
+            me an ideal candidate for this opening.
           </Chakra.Text>
           <Chakra.Text>
             I have submitted my CV for your review and would welcome the change
