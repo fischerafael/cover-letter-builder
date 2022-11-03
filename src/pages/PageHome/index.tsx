@@ -8,7 +8,6 @@ interface IState {
   quality: string;
   candidateQualities: string[];
   candidateName: string;
-  date: string;
 }
 
 export const PageHome = () => {
@@ -19,7 +18,6 @@ export const PageHome = () => {
     quality: "",
     candidateQualities: [],
     candidateName: "",
-    date: "",
   });
 
   const handleChange = (value: string, key: string) => {
@@ -164,14 +162,6 @@ export const PageHome = () => {
           value={state.candidateName}
           onChange={(e) => handleChange(e.target.value, "candidateName")}
         />
-        <Chakra.Input
-          placeholder="Date"
-          type="date"
-          borderRadius="0"
-          fontSize="xs"
-          value={state.date}
-          onChange={(e) => handleChange(e.target.value, "date")}
-        />
       </Chakra.SimpleGrid>
 
       <Chakra.SimpleGrid p="8" w="full" gap="8" justifyItems="flex-end">
@@ -187,13 +177,18 @@ export const PageHome = () => {
           h="full"
           maxH="800px"
         >
-          <Chakra.Text>Dear HIRE_MANAGER</Chakra.Text>
           <Chakra.Text>
-            I am writing in response to the opening for a JOB_TITLE at COMPANY,
-            which I believe you are the hiring manager.
+            Dear {state.hiringManagerName || "HIRING MANAGER"}
           </Chakra.Text>
           <Chakra.Text>
-            I can offer you {qualitiesString},{" "}
+            I am writing in response to the opening for a{" "}
+            {state.jobTitle || "JOB TITLE"} at{" "}
+            {state.companyName || "COMPANY NAME"}, which I believe you are the
+            hiring manager.
+          </Chakra.Text>
+          <Chakra.Text>
+            I can offer you{" "}
+            {qualitiesString.length > 0 ? qualitiesString : "QUALITIES"},{" "}
             {state.candidateQualities.length > 1 && "all of"} which should make
             me an ideal candidate for this opening.
           </Chakra.Text>
@@ -203,8 +198,8 @@ export const PageHome = () => {
           </Chakra.Text>
           <Chakra.Text>Best Regards,</Chakra.Text>
           <Chakra.VStack w="full" align="flex-start">
-            <Chakra.Text>John Travolta</Chakra.Text>
-            <Chakra.Text>03/11/2002</Chakra.Text>
+            <Chakra.Text>{state.candidateName || "CANDIDATE NAME"}</Chakra.Text>
+            <Chakra.Text>{new Date().toLocaleDateString()}</Chakra.Text>
           </Chakra.VStack>
         </Chakra.VStack>
         <Chakra.Button
