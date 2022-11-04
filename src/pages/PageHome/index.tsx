@@ -1,7 +1,6 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import * as Chakra from "@chakra-ui/react";
-import { exportComponentAsPDF } from "react-component-export-image";
 
 const CoverLetter = dynamic(() => import("../../component/CoverLetter"), {
   ssr: false,
@@ -57,8 +56,6 @@ export const PageHome = () => {
       ),
     }));
   };
-
-  const componentRef = React.useRef(null);
 
   return (
     <Chakra.SimpleGrid
@@ -150,42 +147,11 @@ export const PageHome = () => {
         />
       </Chakra.SimpleGrid>
 
-      <Chakra.SimpleGrid p="8" w="full" gap="8" justifyItems="flex-end">
-        <Chakra.VStack
-          w="full"
-          p="8"
-          py="16"
-          gap="8"
-          align="flex-start"
-          fontSize="sm"
-          maxW="540px"
-          h="full"
-          maxH="800px"
-          style={{ outline: "solid 1px #e6e6e6" }}
-          ref={componentRef}
-        >
-          <CoverLetter state={state} />
-        </Chakra.VStack>
-        <Chakra.Button
-          borderRadius="2"
-          colorScheme="linkedin"
-          fontSize="xs"
-          minW="100px"
-          justifySelf="flex-end"
-          onClick={() =>
-            exportComponentAsPDF(componentRef, {
-              fileName: "Cover Letter",
-              pdfOptions: {
-                w: 540,
-                h: 800,
-                unit: "pt",
-                // pdfFormat: [800, 540],
-              },
-            })
-          }
-        >
-          Download Cover Letter
-        </Chakra.Button>
+      <Chakra.SimpleGrid p="8" w="full" justifyItems="center" gap="8">
+        <CoverLetter state={state} />
+        <Chakra.Text fontSize="xs" textAlign="center">
+          Click on the Cover Letter to Download
+        </Chakra.Text>
       </Chakra.SimpleGrid>
     </Chakra.SimpleGrid>
   );
