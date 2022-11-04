@@ -77,7 +77,7 @@ export const PageHome = () => {
             </Chakra.Text>
           </Chakra.Text>
           <Chakra.Text>
-            Based on the template, as per Harvard Business Review's David
+            Based on the template, as per Harvard Business Review author David
             Silverman, is the best template a hiring manager can ever receive.
           </Chakra.Text>
         </Chakra.VStack>
