@@ -11,13 +11,18 @@ export const PageTestReactPDF = () => {
     const canvas = await html2canvas(element, {
       scale: 4,
     });
-    const data = canvas.toDataURL("image/png");
+    const data = canvas.toDataURL("image/svg");
 
-    const pdf = new jsPDF();
+    const pdf = new jsPDF({
+      format: [1200, 1200],
+      unit: "px",
+      compress: true,
+    });
     const props = pdf.getImageProperties(data);
     const width = pdf.internal.pageSize.getWidth();
     const height = (props.height * width) / props.width;
     pdf.addImage(data, "PNG", 0, 0, width, height);
+
     pdf.save("print.pdf");
   };
 
@@ -44,8 +49,8 @@ export const PageTestReactPDF = () => {
     <Chakra.VStack w="full" minH="100vh" justify="center">
       <Chakra.VStack
         bg="gray.50"
-        w="600px"
-        h="600px"
+        w="400px"
+        h="400px"
         p="8"
         justify="space-around"
         ref={card}
